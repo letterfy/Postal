@@ -92,7 +92,7 @@ private func listGenerator<Element>(unsafeList list: UnsafePointer<clist>, of: E
     }
 }
 
-private func arrayGenerator<Element>(unsafeArray array: UnsafePointer<carray>, of: Element.Type) -> AnyIterator<Element> {
+private func arrayGenerator<Element>(unsafeArray array: UnsafeMutablePointer<carray>, of: Element.Type) -> AnyIterator<Element> {
     var idx: UInt32 = 0
     let len = carray_count(array)
     return AnyIterator {
@@ -110,7 +110,7 @@ func pointerSequence<Element>(_ unsafeList: UnsafePointer<clist>, of: Element.Ty
     return AnySequence { return pointerListGenerator(unsafeList: unsafeList, of: of) }
 }
 
-func sequence<Element>(_ unsafeArray: UnsafePointer<carray>, of: Element.Type) -> AnySequence<Element> {
+func sequence<Element>(_ unsafeArray: UnsafeMutablePointer<carray>, of: Element.Type) -> AnySequence<Element> {
     return AnySequence { return arrayGenerator(unsafeArray: unsafeArray, of: of) }
 }
 

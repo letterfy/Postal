@@ -5,8 +5,8 @@ scriptpath="`pwd`"
 popd > /dev/null
 
 # configuration
-url="https://github.com/snipsco/libetpan.git"
-rev=6a08017f1c742f0c5817d6c1c71143a37da967be
+url="https://github.com/letterfy/libetpan.git"
+rev=a6e6fb1b9d298c690db2eafb48a853e5b26c68d5
 
 ios_target="libetpan ios"
 macos_target="static libetpan"
@@ -25,9 +25,9 @@ ios_sdkminversion="7.0"
 ios_sdkversion="`xcodebuild -showsdks 2>/dev/null | grep iphoneos | sed 's/.*iphoneos\(.*\)/\1/'`"
 
 macos_library="libetpan.a"
-macos_sdk="`xcodebuild -showsdks 2>/dev/null | grep macosx | sed 's/.*macosx\(.*\)/\1/'`"
+macos_sdk="`xcodebuild -showsdks 2>/dev/null | grep ' macosx' | sed 's/.* macosx\(.*\)/\1/'`"
 macos_archs="x86_64"
-macos_sdkminversion="10.7"
+macos_sdkminversion="10.10"
 
 BUILD_TIMESTAMP=`date +'%Y%m%d%H%M%S'`
 checkoutdir="$scriptpath/checkouts"

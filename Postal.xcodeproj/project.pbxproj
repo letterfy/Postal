@@ -53,6 +53,7 @@
 		98C9D4F91D58A4F800635F9F /* Postal.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 98C9D4F71D58A4A000635F9F /* Postal.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		98DB04371CEC7337003CAABB /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 98DB04361CEC7337003CAABB /* libz.tbd */; };
 		98DB04391CEC7342003CAABB /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 98DB04381CEC7342003CAABB /* libiconv.tbd */; };
+		BA3F7F68247F2C6A001BD664 /* IMAPSession+Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA3F7F67247F2C6A001BD664 /* IMAPSession+Store.swift */; };
 		F7039DAB1D92B23200132867 /* LibetpanConversionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7039DAA1D92B23200132867 /* LibetpanConversionTests.swift */; };
 		F7039DAC1D92B23200132867 /* LibetpanConversionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7039DAA1D92B23200132867 /* LibetpanConversionTests.swift */; };
 		F71325661D50CA84005DFC15 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = F71325651D50CA84005DFC15 /* Configuration.swift */; };
@@ -167,6 +168,7 @@
 		98DB009F1CEC6983003CAABB /* PostalTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PostalTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		98DB04361CEC7337003CAABB /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		98DB04381CEC7342003CAABB /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
+		BA3F7F67247F2C6A001BD664 /* IMAPSession+Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IMAPSession+Store.swift"; sourceTree = "<group>"; };
 		F7039DAA1D92B23200132867 /* LibetpanConversionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LibetpanConversionTests.swift; sourceTree = "<group>"; };
 		F71325651D50CA84005DFC15 /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
 		F75DD4741D4BAC1500D40E9C /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Result.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -258,6 +260,7 @@
 				980745401D63311D0021D60F /* IMAPSession+List.swift */,
 				F7C25FFB1DE4E9E50021A138 /* IMAPSession+Folder.swift */,
 				F7F03A061D4BA5A70083397F /* IMAPSession.swift */,
+				BA3F7F67247F2C6A001BD664 /* IMAPSession+Store.swift */,
 			);
 			name = Session;
 			sourceTree = "<group>";
@@ -696,6 +699,7 @@
 			files = (
 				F7F03C7B1D4BA5A90083397F /* ContentDisposition+Parsing.swift in Sources */,
 				F7F03C7C1D4BA5A90083397F /* ContentEncoding+Parsing.swift in Sources */,
+				BA3F7F68247F2C6A001BD664 /* IMAPSession+Store.swift in Sources */,
 				F7F03EAC1D4BA5A90083397F /* Message+Parsing.swift in Sources */,
 				F7F03EAE1D4BA5A90083397F /* MessageFlags+Parsing.swift in Sources */,
 				F7E884A61D59C7F500D02CC2 /* PostalError.swift in Sources */,

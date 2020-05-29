@@ -906,12 +906,6 @@ int mailimap_is_rambler_workaround_enabled(mailimap * session);
 
 LIBETPAN_EXPORT
 void mailimap_set_rambler_workaround_enabled(mailimap * session, int enabled);
-    
-LIBETPAN_EXPORT
-int mailimap_hack_date_time_parse(const char * str,
-                                  struct mailimap_date_time ** result,
-                                  size_t progr_rate,
-                                  progress_function * progr_fun);
 
 #ifndef LIBETPAN_HAS_MAILIMAP_QIP_WORKAROUND
 #define LIBETPAN_HAS_MAILIMAP_QIP_WORKAROUND	1
