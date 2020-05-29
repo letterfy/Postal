@@ -25,7 +25,7 @@
 import Foundation
 import libetpan
 
-enum IMAPStoreFlagsRequestKind: Int {
+public enum IMAPStoreFlagsRequestKind: Int {
     case IMAPStoreFlagsRequestKindAdd = 0
     case IMAPStoreFlagsRequestKindRemove = 1
     case IMAPStoreFlagsRequestKindSet = 2

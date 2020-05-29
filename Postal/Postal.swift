@@ -263,6 +263,16 @@ public extension Postal {
     }
 }
 
+// MARK: - Store
+
+public extension Postal {
+    func storeFlagsAndCustomFlags(_ folder: String, uids: IndexSet, kind: IMAPStoreFlagsRequestKind, flags: MessageFlag, customFlags: Array<String>, completion: @escaping (Result<Void, PostalError>) -> Void) {
+        doAsync({
+            try self.session.storeFlagsAndCustomFlags(folder, set: .uid(uids), kind: kind, flags: flags, customFlags: customFlags)
+        }, completion: completion)
+    }
+}
+
 // MARK: - Privates
 
 private extension Postal {
