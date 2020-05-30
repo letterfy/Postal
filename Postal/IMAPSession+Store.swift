@@ -33,11 +33,9 @@ public enum IMAPStoreFlagsRequestKind: Int {
 
 extension IMAPSession {
     func storeFlagsAndCustomFlags(_ folder: String, set: IMAPIndexes, kind: IMAPStoreFlagsRequestKind, flags: MessageFlag, customFlags: Array<String>) throws {
-        // let unsafeSet: UnsafeMutablePointer<mailimap_set> = UnsafeMutablePointer<mailimap_set>.
-        //let unsafeFlags: UnsafeMutablePointer<mailimap_store_att_flags> = UnsafeMutablePointer<mailimap_store_att_flags>()
-        let flagList: UnsafeMutablePointer<mailimap_flag_list>? = UnsafeMutablePointer<mailimap_flag_list>.init(bitPattern: 0)
-        var storeAttFlags: UnsafeMutablePointer<mailimap_store_att_flags>? = nil
-        let givenIndexSet: IndexSet
+        var givenIndexSet: IndexSet
+        
+        try select(folder)
         
         typealias StoreFunc = (_ session: UnsafeMutablePointer<mailimap>?, _ set: UnsafeMutablePointer<mailimap_set>?, _ store_att_flags: UnsafeMutablePointer<mailimap_store_att_flags>?) -> Int32
         var storeFunc: StoreFunc
@@ -52,43 +50,47 @@ extension IMAPSession {
                 storeFunc = mailimap_store
         }
         
+        var newFlagList = mailimap_flag_list_new_empty()
+        defer { mailimap_flag_list_free(newFlagList) }
+        
         if flags.contains(.seen) {
-            let f = mailimap_flag_new_seen();
-            mailimap_flag_list_add(flagList, f);
+            mailimap_flag_list_add(newFlagList, mailimap_flag_new_seen());
         }
         
         if flags.contains(.answered) {
             let f = mailimap_flag_new_answered();
-            mailimap_flag_list_add(flagList, f);
+            mailimap_flag_list_add(newFlagList, f);
         }
         
         if flags.contains(.flagged) {
             let f = mailimap_flag_new_flagged();
-            mailimap_flag_list_add(flagList, f);
+            mailimap_flag_list_add(newFlagList, f);
         }
         
-        for indexSet in givenIndexSet.enumerate(batchSize: configuration.batchSize) {
-            let imapSet = indexSet.unreleasedMailimapSet
-            defer { mailimap_set_free(imapSet) }
+        try store(newFlagList, set: set)
+    }
+    
+    
+    private func store(_ flags: UnsafeMutablePointer<mailimap_flag_list>?,  set: IMAPIndexes) throws {
+        let storeFlagsSet = mailimap_store_att_flags_new_set_flags_silent(flags)
+        
+        typealias StoreFunc = (_ session: UnsafeMutablePointer<mailimap>?, _ set: UnsafeMutablePointer<mailimap_set>?, _ store_att_flags: UnsafeMutablePointer<mailimap_store_att_flags>?) -> Int32
+        var storeFunc: StoreFunc
+        
+        var indexSet: IndexSet
+        switch set {
+            case .uid(let indxSet):
+                indexSet = indxSet
+                storeFunc = mailimap_uid_store
             
-            switch kind {
-                case .IMAPStoreFlagsRequestKindAdd:
-                    storeAttFlags = mailimap_store_att_flags_new_remove_flags_silent(flagList)
-                    break;
-                
-                case .IMAPStoreFlagsRequestKindRemove:
-                    storeAttFlags = mailimap_store_att_flags_new_remove_flags_silent(flagList)
-                    break;
-                
-                case .IMAPStoreFlagsRequestKindSet:
-                    storeAttFlags = mailimap_store_att_flags_new_set_flags_silent(flagList)
-                    break;
-            }
-            
-            try storeFunc(self.imap, imapSet, storeAttFlags).toIMAPError?.check()
+            case .indexes(let indxSet):
+                indexSet = indxSet
+                storeFunc = mailimap_store
         }
         
+        let imapSet = indexSet.unreleasedMailimapSet
+        defer { mailimap_set_free(imapSet) }
         
-        mailimap_store_att_flags_free(storeAttFlags)
+        try storeFunc(imap, imapSet, storeFlagsSet).toIMAPError?.check()
     }
 }
