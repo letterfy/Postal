@@ -29,7 +29,7 @@ open class Postal {
     fileprivate let session: IMAPSession
     fileprivate let queue: OperationQueue
     fileprivate let configuration: Configuration
-
+    
     /// Setting this variable will allow user to access to the internal logger.
     open var logger: Logger? {
         set { session.logger = newValue }
@@ -244,7 +244,6 @@ public extension Postal {
 // MARK: - Messages
 
 public extension Postal {
-    
     /// Move messages from a given folder to another folder.
     ///
     /// - parameters:
@@ -259,6 +258,32 @@ public extension Postal {
         
         doAsync({
             try self.session.moveMessages(fromFolder: fromFolder, toFolder: toFolder, uids: uids)
+        }, completion: completion)
+    }
+    
+    /// Delete messages from INBOX
+    ///
+    /// - parameters:
+    ///     - folderName: the folder name to expunge
+    ///     - uids: The message uids to be deleted.
+    ///     - completion: The completion handler when the request is finished with or without an error.
+    func deleteMessages(folderNamed folderName: String, uids: IndexSet, completion: @escaping (Result<Void, PostalError>) -> Void) {
+        doAsync({
+            try self.session.flagMessages(fromFolder: folderName, uids: uids, flag: .deleted)
+            try self.session.expunge(folderNamed: folderName)
+        }, completion: completion)
+    }
+
+    /// Flag messages from INBOX
+    ///
+    /// - parameters:
+    ///     - folderName: the folder name for email
+    ///     - uids: The message uids to be deleted.
+    ///     - flag: flag to apply
+    ///     - completion: The completion handler when the request is finished with or without an error.
+    func flagMessages(folderNamed folderName: String, uids: IndexSet, flag: MessageFlag, completion: @escaping (Result<Void, PostalError>) -> Void) {
+        doAsync({
+            try self.session.flagMessages(fromFolder: folderName, uids: uids, flag: flag)
         }, completion: completion)
     }
 }

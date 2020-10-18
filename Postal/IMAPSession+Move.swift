@@ -47,11 +47,62 @@ extension IMAPSession {
             } else {
                 result = [:]
             }
-
+            
             if srcUid != nil { mailimap_set_free(srcUid) }
             if destUid != nil { mailimap_set_free(destUid) }
             
             return combined.union(result)
         }
+    }
+    
+    func expungeMessages(fromFolder: String, uids: IndexSet) throws {
+        guard uids.count > 0 else { return }
+        
+        try select(fromFolder)
+        
+        let imapSet = uids.unreleasedMailimapSet
+        defer { mailimap_set_free(imapSet) }
+        
+        try mailimap_uid_expunge(imap, imapSet).toIMAPError?.check()
+    }
+    
+    func flagMessages(fromFolder: String, uids: IndexSet, flag: MessageFlag) throws {
+        guard uids.count > 0 else { return }
+        
+        try select(fromFolder)
+        
+        let imapSet = uids.unreleasedMailimapSet
+
+        let flagList = mailimap_flag_list_new_empty()
+        
+        switch flag {
+        case .answered:
+            break
+        case .deleted:
+            try mailimap_flag_list_add(flagList, mailimap_flag_new_deleted()).toIMAPError?.check()
+            break
+        case .flagged:
+            try mailimap_flag_list_add(flagList, mailimap_flag_new_flagged()).toIMAPError?.check()
+            break
+        case .answered:
+            try mailimap_flag_list_add(flagList, mailimap_flag_new_answered()).toIMAPError?.check()
+            break
+        case .seen:
+            try mailimap_flag_list_add(flagList, mailimap_flag_new_seen()).toIMAPError?.check()
+            break
+        default:
+            return
+        }
+
+        let flags = mailimap_store_att_flags_new(1, 0, flagList)
+                
+        defer {
+            mailimap_flag_list_free(flagList)
+            //mailimap_store_att_flags_free(flags)
+            //mailimap_flag_free(deletedFlag)
+            mailimap_set_free(imapSet)
+        }
+
+        try mailimap_uid_store(imap, imapSet, flags).toIMAPError?.check()
     }
 }
